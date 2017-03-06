@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Gilded Rose - Asad Khan</title>
+</head>
+<body>
+
+    <div>
+        <h2>All Items</h2>
+        <ul id="items" />
+    </div>
+    <div>
+
+        <h2>Buy Product by ID</h2>
+        <input type="text" id="itemId" size="5" />
+        <p id="item" />
+        <div>
+            <input id="buyBtn" type="button" value="Buy" onclick="buy();" />
+        </div>
+        <hr/>
+        <div>
+            <input id="loginBtn" type="button" value="Login using Google" onclick="login();" />
+            <input id="logoutBtn" type="button" value="Logout" onclick="logout();" />
+        </div>
+    </div>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+    var uri = 'api/items';
+    var loginUri = 'api/login/externallogin';
+    var logoutUri = 'api/logout';
+    var isLoggedInUri = 'api/isLoggedIn';
+    var buyUri = 'api/items/buy';
+
+    $(document).ready(function () {
+        $('#loginBtn').hide();
+        $('#logoutBtn').hide();
+
+        IsUserLoggedIn();
+
+        ShowInventory();
+    });
+
+
+    function IsUserLoggedIn() {
+        $.getJSON(isLoggedInUri)
+          .done(function (data) {
+              if (data == true) {
+                  $('#logoutBtn').show();
+                  return;
+              }
+              $('#logoutBtn').hide();
+              return;
+          })
+          .fail(function (jqXHR, textStatus, err) {
+              $('#logoutBtn').hide();
+          });
+    }
+
+    function ShowInventory() {
+        $.getJSON(uri)
+            .done(function (data) {
+                $('#items').empty();
+               // On success, 'data' contains a list of items.
+                $.each(data, function (key, item) {
+                // Add a list item for the item.
+                $('<li>', { text: formatItem(item) }).appendTo($('#items'));
+            });
+        });
+    }
+
+    function formatItem(i) {
+        if (i.name == undefined) {
+            return "Invalid Item ID";
+        }
+
+        var itemInfo = i.id + ". " + i.name + ': $' + i.price;
+        if (i.available) {
+            return itemInfo += " (Available)";
+        }
+        return itemInfo += " (Sold to " + i.soldToName + ")";
+    }
+
+    function buy() {
+      var id = $('#itemId').val();
+      $.getJSON(uri + '/' + id)
+          .done(function (data) {
+              $('#item').text(formatItem(data));
+              ShowInventory();
+          })
+          .fail(function (jqXHR, textStatus, err) {
+            $('#item').text('Error: ' + err);
+            if (err == "Unauthorized") {
+                $('#loginBtn').show();
+            }
+          });
+    }
+
+    function login() {
+        $(location).attr('href', loginUri);
+    }
+
+    function logout() {
+        $.getJSON(logoutUri)
+        .done(function (data) {
+            $('#logoutBtn').hide();
+        });
+    }
+
+    </script>
+</body>
+</html>
