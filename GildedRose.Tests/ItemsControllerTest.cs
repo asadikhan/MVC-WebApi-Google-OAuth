@@ -47,6 +47,16 @@ namespace GildedRose.Tests
             soldToName = "Test User 3"
         };
 
+        Item testItem4 = new Item
+        {
+            id = 4444,
+            name = "Test Item 4444",
+            description = "Test Item 4444 Description",
+            price = 4444,
+            available = true,
+            soldToName = "Test User 4"
+        };
+
         #endregion
 
         /// <summary>
@@ -123,6 +133,15 @@ namespace GildedRose.Tests
             contentResult = result as OkNegotiatedContentResult<Item>;
 
             Assert.AreNotEqual(contentResult.Content.soldToName, testItem3.soldToName);
+        }
+
+        [TestMethod]
+        public void TestBuyNonExistentItem()
+        {
+            IHttpActionResult result = itemsController.GetItem(testItem4.id);
+            var contentResult = result as OkNegotiatedContentResult<Item>;
+
+            Assert.IsNull(contentResult.Content);
         }
     }
 }
