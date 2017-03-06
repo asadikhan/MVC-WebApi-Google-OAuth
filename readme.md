@@ -13,3 +13,33 @@ There is also a Unit Test project in the solution.
 ## Integration Test
 Integration Tests with Google OAuth are not included. You can mock to test, but since Google requires someone to click consent on an approval screen, you can use Selenium to write integration tests. 
 
+## Sample GetInventory Request
+```sh 
+GET http://localhost:58780/api/items HTTP/1.1
+Host: localhost:58780
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Referer: http://localhost:58780/
+Accept-Encoding: gzip, deflate, sdch, br
+Accept-Language: en-US,en;q=0.8
+Cookie: .AspNet.ExternalCookie=Oo1EPJYek23LCDhcaH-...A
+```
+
+## Sample GetInventory Response
+```sh 
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/10.0
+X-AspNet-Version: 4.0.30319
+X-SourceFiles: =?UTF-8?B?YzpcdXNlcnNcYXNhZC5raGFuXGRvY3VtZW50c1x2aXN1YWwgc3R1ZGlvIDIwMTVcUHJvamVjdHNcR2lsZGVkUm9zZVxHaWxkZWRSb3NlXGFwaVxpdGVtcw==?=
+X-Powered-By: ASP.NET
+Date: Mon, 06 Mar 2017 19:21:24 GMT
+Content-Length: 655
+
+[{"id":1001,"name":"Rare China Doll","description":"This is a rare miniature china doll.","price":100,"available":true,"soldToName":null},{"id":1002,"name":"Hemingway's Lost Manuscripts","description":"You won't believe the story behind how we traced down this rare historical literary gem.","price":1000000,"available":false,"soldToName":"Asad Khan"},{"id":1003,"name":"Signed Led Zeppelin Biography","description":"Rare book signed by all four original rockers.","price":450000,"available":true,"soldToName":null},{"id":1003,"name":"Peace and love","description":"What else does one need? Indeed.","price":2147483647,"available":true,"soldToName":null}]
+```
